@@ -1,18 +1,11 @@
-name: medexware-tools
+name: movie-api
 version: '3'
 
 services:
   medexware-tools-api:
-    image: jpbizantino/medexware-tools-api
+    image: movie-api
     restart: always
     ports:
       - '3000:3000'
-      - '1433:1433'
     environment:
-      - DATABASE_URL=sqlserver://192.168.1.16\SQLEXPRESS;database=OFTA_OYB_PRO;user=sa;password=homero;encrypt=DANGER_PLAINTEXT;connection_limit=40;pool_timeout=0
-
-  medexware-tools-ui:
-    image: jpbizantino/medexware-tools-ui
-    restart: always
-    ports:
-      - '5173:5173'
+      - DATABASE_URL=postgresql://postgres:homero@localhost:5432/movies?schema=public
