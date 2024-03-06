@@ -1,0 +1,65 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userId    String   @id @default(dbgenerated("gen_random_uuid()")) @map("user_id") @db.Uuid
+  username  String   @unique() @map("username") @db.VarChar
+  email     String   @unique @map("email") @db.VarChar
+  password  String   @map("password") @db.VarChar
+  roles     Role[]
+  active    Boolean  @default(true) @map("active") @db.Boolean
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("user")
+}
+
+model Role {
+  roleId         String           @id @default(dbgenerated("gen_random_uuid()")) @map("role_id") @db.Uuid
+  code           String           @unique @map("code") @db.VarChar
+  name           String           @map("name") @db.VarChar
+  active         Boolean          @map("active") @db.Boolean
+  users          User[]
+  RolePermission RolePermission[]
+
+  @@map("role")
+}
+
+model Permission {
+  permissionId   String           @id @default(dbgenerated("gen_random_uuid()")) @map("permission_id") @db.Uuid
+  code           String           @unique @map("code") @db.VarChar
+  name           String           @map("name") @db.VarChar
+  active         Boolean          @map("active") @db.Boolean
+  RolePermission RolePermission[]
+
+  @@map("permission")
+}
+
+model RolePermission {
+  role         Role       @relation(fields: [roleId], references: [roleId])
+  roleId       String     @map("role_id") @db.Uuid
+  permission   Permission @relation(fields: [permissionId], references: [permissionId])
+  permissionId String     @map("permission_id") @db.Uuid
+
+  @@id([roleId, permissionId])
+  @@map("role_permission")
+}
+
+
+model Review {
+  reviewId  String   @id @default(dbgenerated("gen_random_uuid()")) @map("review_id") @db.Uuid
+  title     String   @map("title") @db.VarChar
+  content   String   @map("content") @db.VarChar
+  qualification  Int   @map("qualification") @db.Integer
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("review")
+}
