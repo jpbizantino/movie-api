@@ -33,7 +33,7 @@ export class ReviewsController {
   constructor(private readonly ReviewService: ReviewsService) {}
 
   @Post()
-  // Reviews
+  // Roles
   @Roles(RoleEnum.ADMIN, RoleEnum.BASIC)
   // Permissions
   @Permissions(PermissionEnum.CREATE, PermissionEnum.CREATE_REVIEW)
@@ -43,6 +43,7 @@ export class ReviewsController {
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: ReviewEntity })
   async create(@Body() createReviewDto: CreateReviewDto) {
+    console.log(createReviewDto);
     return await this.ReviewService.create(createReviewDto);
   }
 

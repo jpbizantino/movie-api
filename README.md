@@ -5,15 +5,6 @@
 
 ## Quick Start Guide
 
-### Using Docker + Docker Compose:
-
-Run the following commands:
-
-```
-$ docker build -t movie-api .
-$ docker-compose up
-```
-
 ### Run project in dev mode:
 
 Create .env file
